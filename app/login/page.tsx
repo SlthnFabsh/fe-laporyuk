@@ -15,7 +15,12 @@ function LoginForm() {
 
   useEffect(() => {
     if (user) {
-      router.push(redirect);
+      // ✅ Cek role user untuk redirect yang tepat
+      if (user.role === "admin" || user.role === "super_admin") {
+        router.push("/dashboard/admin");
+      } else {
+        router.push(redirect);
+      }
     }
   }, [user, router, redirect]);
 
@@ -24,55 +29,63 @@ function LoginForm() {
     setLoading(true);
     const result = await login(username, password);
     setLoading(false);
-    
+
     if (result.success) {
-      // Cek apakah ada laporan pending dari sessionStorage
       const pendingLaporan = sessionStorage.getItem("pendingLaporan");
       if (pendingLaporan) {
-        sessionStorage.removeItem("pendingLaporan");
-        // Simpan ke state global atau arahkan ke halaman dengan data
         router.push("/?pending=true");
-      } else {
-        router.push(redirect);
       }
+      // Redirect akan dihandle oleh useEffect di atas
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Username</label>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Masuk</h1>
+          <p className="text-gray-500 mt-2">Silakan login untuk melanjutkan</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Masukkan username"
               required
             />
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2">Password</label>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Masukkan password"
               required
             />
           </div>
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+            className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition disabled:opacity-50"
           >
             {loading ? "Memproses..." : "Login"}
           </button>
         </form>
-        <p className="text-center mt-4">
-          Belum punya akun? <Link href="/register" className="text-blue-500">Register</Link>
+
+        <p className="text-center mt-6 text-gray-600">
+          Belum punya akun?{" "}
+          <Link href="/register" className="text-blue-600 font-semibold hover:underline">
+            Daftar di sini
+          </Link>
         </p>
       </div>
     </div>

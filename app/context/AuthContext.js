@@ -1,4 +1,4 @@
-"use client"; // ✅ HARUS DI BARIS PERTAMA!
+"use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../config/api";
@@ -28,28 +28,77 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const response = await api.post("/auth/login", { username, password });
-      const { token, user } = response.data;
+      
+      // ✅ Ambil data dari response
+      const { token, user: userData } = response.data;
+      
+      // ✅ Validasi: pastikan token dan userData ada
+      if (!token || !userData) {
+        toast.error("Login gagal: data tidak lengkap");
+        return { success: false, message: "Data tidak lengkap" };
+      }
+      
+      // ✅ Simpan ke localStorage
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
+      
       toast.success("Login berhasil!");
       return { success: true };
+      
     } catch (error) {
-      const message = error.response?.data?.message || "Login gagal";
-      toast.error(message);
-      return { success: false, message };
+      // ✅ Tangani error dari backend
+      console.error("Login error:", error);
+      
+      let errorMessage = "Login gagal";
+      
+      if (error.response) {
+        // Server merespon dengan status error (4xx, 5xx)
+        const data = error.response.data;
+        errorMessage = data.message || data.error || "Username atau password salah";
+        
+        // ✅ Tampilkan toast error
+        toast.error(errorMessage);
+        
+      } else if (error.request) {
+        // Request dibuat tapi tidak ada respons
+        errorMessage = "Tidak dapat terhubung ke server";
+        toast.error(errorMessage);
+        
+      } else {
+        // Error lain
+        errorMessage = error.message || "Terjadi kesalahan";
+        toast.error(errorMessage);
+      }
+      
+      return { success: false, message: errorMessage };
     }
   };
 
   const register = async (username, password) => {
     try {
-      await api.post("/auth/register", { username, password });
-      toast.success("Register berhasil! Silakan login.");
+      const response = await api.post("/auth/register", { username, password });
+      
+      toast.success(response.data.message || "Register berhasil! Silakan login.");
       return { success: true };
+      
     } catch (error) {
-      const message = error.response?.data?.message || "Register gagal";
-      toast.error(message);
-      return { success: false, message };
+      console.error("Register error:", error);
+      
+      let errorMessage = "Register gagal";
+      
+      if (error.response) {
+        errorMessage = error.response.data.message || error.response.data.error || "Username sudah digunakan";
+        toast.error(errorMessage);
+      } else if (error.request) {
+        errorMessage = "Tidak dapat terhubung ke server";
+        toast.error(errorMessage);
+      } else {
+        errorMessage = error.message || "Terjadi kesalahan";
+        toast.error(errorMessage);
+      }
+      
+      return { success: false, message: errorMessage };
     }
   };
 
