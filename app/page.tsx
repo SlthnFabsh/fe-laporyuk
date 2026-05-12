@@ -401,7 +401,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="text-blue-600 font-semibold text-sm uppercase tracking-widest">Keunggulan Kami</span>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mt-2">Mengapa LAPOR! Masyarakat?</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mt-2">Mengapa LaporYuk?</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">Platform yang dirancang untuk kemudahan, transparansi, dan aksi nyata.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -484,35 +484,57 @@ export default function HomePage() {
       {/* ── LAPORAN TERBARU SECTION - DIHAPUS ───────────────────────────────── */}
 
       {/* ── CTA BANNER ─────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-gradient-to-r from-blue-700 to-violet-700 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-16 -right-16 w-72 h-72 bg-white/5 rounded-full" />
-          <div className="absolute -bottom-16 -left-16 w-72 h-72 bg-white/5 rounded-full" />
-        </div>
-        <div className="relative max-w-3xl mx-auto px-4 text-center">
-          <div className="text-5xl mb-4">📣</div>
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Suaramu Berharga</h2>
-          <p className="text-blue-100 text-lg mb-8">Setiap laporan yang masuk akan kami tindaklanjuti. Bersama-sama kita wujudkan pelayanan publik yang lebih baik.</p>
-          <Link
-            href={user ? "/laporan/create" : "/register"}
-            className="inline-flex items-center gap-2 bg-white text-blue-700 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-blue-50 transition-all hover:scale-105 shadow-2xl shadow-blue-900/30"
-          >
-            {user ? "Buat Laporan Sekarang" : "Bergabung Sekarang"}
-            <ChevronRightIcon className="w-5 h-5" />
-          </Link>
-        </div>
-      </section>
+{/* ── CTA BANNER DENGAN GAMBAR ─────────────────────────────────────────────── */}
+<section className="relative py-20 overflow-hidden">
+  {/* Gambar Background */}
+  <div className="absolute inset-0">
+    <img 
+      src="/photos/cta-bg.jpg" 
+      alt="Background" 
+      className="w-full h-full object-cover"
+    />
+    {/* Overlay gelap agar teks terbaca */}
+    <div className="absolute inset-0 bg-black/60" />
+  </div>
+
+  {/* Efek装饰 (opsional) */}
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute -top-16 -right-16 w-72 h-72 bg-white/5 rounded-full" />
+    <div className="absolute -bottom-16 -left-16 w-72 h-72 bg-white/5 rounded-full" />
+  </div>
+
+  {/* Konten */}
+  <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
+    <div className="text-5xl mb-4">📣</div>
+    <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Suaramu Berharga</h2>
+    <p className="text-blue-100 text-lg mb-8">
+      Setiap laporan yang masuk akan kami tindaklanjuti. 
+      Bersama-sama kita wujudkan pelayanan publik yang lebih baik.
+    </p>
+    <Link
+      href={user ? "/laporan/create" : "/register"}
+      className="inline-flex items-center gap-2 bg-white text-blue-700 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-blue-50 transition-all hover:scale-105 shadow-2xl shadow-black/30"
+    >
+      {user ? "Buat Laporan Sekarang" : "Bergabung Sekarang"}
+      <ChevronRightIcon className="w-5 h-5" />
+    </Link>
+  </div>
+</section>
 
       {/* ── FOOTER ─────────────────────────────────────────────────────────── */}
       <footer className="bg-gray-900 text-gray-400 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <Link href="/" className="flex items-center gap-2 mb-3 group">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-violet-500 rounded-xl flex items-center justify-center">
-                  <MegaphoneIcon className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-white font-extrabold text-lg">LAPOR! Masyarakat</span>
+            <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden">
+              <img 
+                src="/photos/logo.png"
+                alt="LaporYuk Logo" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+                <span className="text-white font-extrabold text-lg">LaporYuk!</span>
               </Link>
               <p className="text-sm leading-relaxed">Layanan Aspirasi dan Pengaduan Online Masyarakat. Platform resmi untuk menyampaikan laporan dan aspirasi.</p>
             </div>
@@ -533,7 +555,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
-            <p>© 2024 LAPOR! Masyarakat — Hak Cipta Dilindungi</p>
+            <p>© 2026 LaporYuk! — Hak Cipta Dilindungi</p>
             <div className="flex gap-4">
               <a href="#" className="hover:text-white transition-colors">Kebijakan Privasi</a>
               <a href="#" className="hover:text-white transition-colors">Syarat & Ketentuan</a>
